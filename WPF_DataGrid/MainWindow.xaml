@@ -1,0 +1,71 @@
+﻿<Window x:Class="WPF_DataGrid.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:WPF_DataGrid"
+        mc:Ignorable="d"
+        Title="DataGrid"
+        Height="450"
+        Width="750">
+
+    <Grid>
+        <DataGrid Name="MyTable"
+                  AlternationCount="2"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Style="{StaticResource MyDataGridStyle}">
+
+            <DataGrid.Resources>
+                <!-- Bind Enum to ComboBox -->
+                <ObjectDataProvider x:Key="ProtoResource" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
+                    <ObjectDataProvider.MethodParameters>
+                        <x:Type Type="local:ProtoEnum" />
+                    </ObjectDataProvider.MethodParameters>
+                </ObjectDataProvider>
+            </DataGrid.Resources>
+
+            <!-- 定义表格每一列数据 -->
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="序号" Width="50" Binding="{Binding ID, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="视频" CellStyle="{StaticResource MyCellTextLeftStyle}" Width="*" Binding="{Binding Video, UpdateSourceTrigger=PropertyChanged}" />
+
+                <!-- ComboBox -->
+                <DataGridTemplateColumn Header="协议" Width="100" CellStyle="{StaticResource MyCellFillStyle}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource ResourceKey=ProtoResource}}"
+                                      SelectionChanged="Protocol_SelectionChanged"
+                                      SelectedIndex="0"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="状态" Width="100" Binding="{Binding State, UpdateSourceTrigger=PropertyChanged}" />
+
+                <!-- Button -->
+                <DataGridTemplateColumn Header="操作" Width="80" CellStyle="{StaticResource MyCellFillStyle}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="推流" Click="PushStream_Click" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Button -->
+                <DataGridTemplateColumn Header="删除" Width="80" CellStyle="{StaticResource MyCellFillStyle}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="删除" Foreground="Red" Click="Delete_Click" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
