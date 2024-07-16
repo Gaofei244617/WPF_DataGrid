@@ -14,7 +14,7 @@
         <DataGrid Name="MyTable"
                   AlternationCount="2"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True"
+                  CanUserAddRows="False"
                   Style="{StaticResource MyDataGridStyle}">
 
             <DataGrid.Resources>
@@ -24,11 +24,17 @@
                         <x:Type Type="local:ProtoEnum" />
                     </ObjectDataProvider.MethodParameters>
                 </ObjectDataProvider>
+
+                <ObjectDataProvider x:Key="TransResource" ObjectType="{x:Type sys:Enum}" MethodName="GetValues">
+                    <ObjectDataProvider.MethodParameters>
+                        <x:Type Type="local:TransEnum" />
+                    </ObjectDataProvider.MethodParameters>
+                </ObjectDataProvider>
             </DataGrid.Resources>
 
             <!-- 定义表格每一列数据 -->
             <DataGrid.Columns>
-                <DataGridTextColumn Header="序号" Width="50" Binding="{Binding ID, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="序号" Width="50" IsReadOnly="True" Binding="{Binding ID, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="视频" CellStyle="{StaticResource MyCellTextLeftStyle}" Width="*" Binding="{Binding Video, UpdateSourceTrigger=PropertyChanged}" />
 
                 <!-- ComboBox -->
@@ -45,7 +51,27 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="状态" Width="100" Binding="{Binding State, UpdateSourceTrigger=PropertyChanged}" />
+                <!-- ComboBox -->
+                <DataGridComboBoxColumn Header="通信" Width="80" IsReadOnly="False" CellStyle="{StaticResource MyCellFillStyle}">
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding Source={StaticResource ResourceKey=TransResource}}" />
+                            <Setter Property="SelectedValue" Value="{Binding Path=TransProto, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding Source={StaticResource ResourceKey=TransResource}}" />
+                            <Setter Property="SelectedValue" Value="{Binding Path=TransProto, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+
+                <DataGridTextColumn Header="状态" Width="100" IsReadOnly="True" Binding="{Binding State, UpdateSourceTrigger=PropertyChanged}" />
 
                 <!-- Button -->
                 <DataGridTemplateColumn Header="操作" Width="80" CellStyle="{StaticResource MyCellFillStyle}">
@@ -64,7 +90,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

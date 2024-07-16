@@ -80,6 +80,12 @@ namespace WPF_DataGrid
         RTMP
     }
 
+    public enum TransEnum
+    {
+        TCP,
+        UDP
+    }
+
     public enum StateEnum
     {
         Init,
@@ -122,6 +128,17 @@ namespace WPF_DataGrid
             {
                 _protocol = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Protocol)));
+            }
+        }
+
+        private TransEnum _transProto;
+        public TransEnum TransProto
+        {
+            get => _transProto;
+            set 
+            {
+                _transProto = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TransEnum)));
             }
         }
 
